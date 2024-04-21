@@ -11,10 +11,9 @@ import threading
 import time
 import tkinter as tk
 from PIL import Image, ImageTk
-import pyautogui
 from pynput.mouse import Listener
 
-# Global variables
+# global variables
 activated = False
 exit_flag = False
 root = None
@@ -53,36 +52,8 @@ def set_system_volume(volume):
     volume_interface = cast(interface, POINTER(IAudioEndpointVolume))
     volume_interface.SetMasterVolumeLevelScalar(volume, None)
 
-# function to create and display GUI
-def create_and_display_gui(image_path):
-    global root, canvas, image_label
-
-    # create GUI
-    root = tk.Tk()
-
-    # maximize the window
-    root.attributes('-fullscreen', True)
-
-    # create a canvas
-    canvas = tk.Canvas(root)
-    canvas.pack(fill="both", expand=True)
-
-    # load and display the image
-    image = Image.open(image_path)
-    image = ImageTk.PhotoImage(image)
-
-    image_label = tk.Label(canvas, image=image)
-    image_label.image = image
-    image_label.pack(fill="both", expand=True)
-
-    # display the GUI
-    root.mainloop()
-
 def activate():
     print("Activating...")
-
-    # display a notification to the intruder
-    # display_notification("INTRUDER ALERT SYSTEM", "INTRUDER HAS ACTIVATED THE ALERT SYSTEM!")
 
     # set volume to maximum (1.0)
     set_system_volume(1.0)
@@ -94,12 +65,7 @@ def activate():
     # take a picture of the intruder
     take_picture()
 
-    # alert_thread = threading.Thread(target=play_alert_sound, args=("sound_effects/alert_sound.mp3",))
-    # alert_thread.start()
-
-    # create and display GUI
-        # create GUI
-
+    # create graphics
     root = tk.Tk()
 
     # maximize the window
@@ -129,10 +95,6 @@ def activate():
 # function to be called when a key is pressed
 def on_key_press(event):
     global activated
-    # if event.name == "esc":
-    #     activated = False
-    #     keyboard.unhook_all()
-    #     exit(0)
     print("A key was pressed:", event.name)
     if(not activated):
         if event.name == "esc":
@@ -141,10 +103,8 @@ def on_key_press(event):
             exit(0)
         else:
             activated = True
-            # activate()
             activate_thread = threading.Thread(target=activate)
             activate_thread.start()
-    # print("Activated:", activated)
 
 # Function to be called when mouse is moved
 def on_move(x, y):
@@ -167,9 +127,9 @@ def display_notification(title, message):
 # main function
 def main():
 
-    time.sleep(1)
+    time.sleep(5)
 
-    display_notification("Intruder Alert System", "Intruder Alert System is running.")
+    display_notification("System", "All systems operational.")
 
     # start the mouse listener thread
     mouse_thread = threading.Thread(target=mousething)
