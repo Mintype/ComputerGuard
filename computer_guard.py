@@ -79,6 +79,9 @@ def create_and_display_gui(image_path):
 def activate():
     print("Activating...")
 
+    # display a notification to the intruder
+    # display_notification("INTRUDER ALERT SYSTEM", "INTRUDER HAS ACTIVATED THE ALERT SYSTEM!")
+
     # set volume to maximum (1.0)
     set_system_volume(1.0)
 
@@ -140,10 +143,12 @@ def on_key_press(event):
 # display a windows toast notification
 def display_notification(title, message):
     toaster = ToastNotifier()
-    toaster.show_toast(title, message, duration=10)
+    toaster.show_toast(title, message, duration=1)
 
 # main function
 def main():
+
+    display_notification("Intruder Alert System", "Intruder Alert System is running.")
 
     # start the keyboard listener thread
     # keyboard_thread = threading.Thread(target=keyboard_listener)
