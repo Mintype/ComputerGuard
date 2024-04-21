@@ -11,6 +11,8 @@ import threading
 import time
 import tkinter as tk
 from PIL import Image, ImageTk
+import pyautogui
+from pynput.mouse import Listener
 
 # Global variables
 activated = False
@@ -127,6 +129,10 @@ def activate():
 # function to be called when a key is pressed
 def on_key_press(event):
     global activated
+    # if event.name == "esc":
+    #     activated = False
+    #     keyboard.unhook_all()
+    #     exit(0)
     print("A key was pressed:", event.name)
     if(not activated):
         if event.name == "esc":
@@ -140,6 +146,19 @@ def on_key_press(event):
             activate_thread.start()
     # print("Activated:", activated)
 
+# Function to be called when mouse is moved
+def on_move(x, y):
+    global activated
+    if(not activated):
+        activated = True
+        activate_thread = threading.Thread(target=activate)
+        activate_thread.start()
+
+def mousething():
+    # Start listening for mouse events
+    with Listener(on_move=on_move) as listener:
+        listener.join()
+
 # display a windows toast notification
 def display_notification(title, message):
     toaster = ToastNotifier()
@@ -148,11 +167,13 @@ def display_notification(title, message):
 # main function
 def main():
 
+    time.sleep(1)
+
     display_notification("Intruder Alert System", "Intruder Alert System is running.")
 
-    # start the keyboard listener thread
-    # keyboard_thread = threading.Thread(target=keyboard_listener)
-    # keyboard_thread.start()
+    # start the mouse listener thread
+    mouse_thread = threading.Thread(target=mousething)
+    mouse_thread.start()
 
     print("Listening for key presses...")
     keyboard.on_press(on_key_press)
